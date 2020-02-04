@@ -8,29 +8,70 @@
 
 // convert current currency values to a string
 string Money::toString() {
-    return "";
+    stringstream result;
+
+    result << hundreds << "Hundreds: " << tens << "Tens: " << fives << "Fives: " << ones << "Ones: "
+    << quarters << "Quarters: " << dimes << "Dimes: " << nickels << "Nickels: " << cents << "Cents: ";
+
 }
 
 // format amount as a local currency and return
 string Money::toCurrency(double amount) {
-    stringstream ss;
 
-    ss << "$" << left << setfill('0') << setw(4) << amount;
+    stringstream ss;
+    ss.imbue(locale(""));
+
+   // ss << showbase << put_money(amount*100);
+
+    ss << "$" << left << setfill('0') << setw(5) << amount;
+
     return ss.str();
-}
+
+
+
+    }
+
 
 // convert currency to float
 // read currency values from stdin and compute value
 // return results
 string Money::processChange() {
-    return "";
+    cin >> hundreds >> tens >> fives >> ones >> quarters >> dimes >> nickels >> cents;
+    // adds the total amount of money
+    total = (hundreds * 100) + (tens * 10) + (fives * 5) + (ones * 1) + (quarters * 0.25) + (dimes * 0.10) + (nickels * 0.05) + (cents * 0.01);
+    return to_string(hundreds) + " hundreds " + to_string(tens) + " tens " + to_string(fives) +" fives " + to_string(ones)
+           + " ones " + to_string(quarters) + " quarters " + to_string(dimes) + " dimes " + to_string(nickels) + " nickels "
+           + to_string(cents) + " pennies = " + toCurrency(total);
+
 }
 
 // read from stdin and process float command
 // convert float to change
 // return results
 string Money::processFloat() {
-    return "";
+float amount;
+cin >> amount;
+int amountInt = (int) (amount*100);
+
+std::ostringstream streamObj;
+streamObj << fixed << std::setprecision(2);
+streamObj << amount;
+
+std::string strObj = streamObj.str();
+
+hundreds = amountInt / 10000;
+tens = (amountInt % 10000) / 1000;
+fives = ((amountInt % 10000) % 1000) / 500;
+ones = (((amountInt % 10000) % 1000) / 500) / 100;
+quarters = ((((amountInt % 10000) % 1000) % 1000) % 500) % 100 / 25;
+dimes = (((((amountInt % 10000) % 1000) % 500) % 100) % 25) / 10;
+nickels = ((((((amountInt % 10000) % 1000) % 500) % 100) % 25) % 10) / 5;
+cents = (((((((amountInt % 10000) % 1000) % 500) % 100) % 25) % 10) % 5) /1;
+
+return toCurrency(amount) + " = " + to_string(hundreds) + " hundreds " + to_string(tens) + " tens "
++ to_string(fives) + " fives " + to_string(ones) + " ones " + to_string(quarters) + " quarters " + to_string(dimes)
++ " dimes " + to_string(nickels) + " nickels " + to_string(cents) + " pennies ";
+
 }
 
 // read from stdin and process check command
@@ -55,5 +96,29 @@ string Money::processChangeFloat() {
 // calculate difference and compute change values
 // output the results
 string Money::processChangeChange() {
-  return "";
+    cin >> hundreds >> tens >> fives >> ones >> quarters >> dimes >> nickels >> cents >> price;
+    total = (hundreds * 100) + (tens * 10) + (fives * 5) + (ones * 1) + (quarters * 0.25) + (dimes * 0.10) +
+            (nickels * 0.05) + (cents * 0.01) + (price * 1);
+
+    amount1 = (100 - price);
+    int amount1Int = (int) (amount1 * 100);
+
+    hundreds100 = (amount1Int / 10000);
+    tens10 = (amount1Int % 10000) / 1000;
+    fives5 = ((amount1Int % 10000) % 1000) / 500;
+    ones1 = (((amount1Int % 10000) % 1000) % 500) / 100;
+    quarters25 = ((((amount1Int % 10000) % 1000) % 500) % 100) / 25;
+    dimes11 = (((((amount1Int % 10000) % 1000) % 500) % 100) % 25) / 10;
+    nickels05 = ((((((amount1Int % 10000) % 1000) % 500) % 100) % 25) % 10) / 5;
+    cents01 = (((((((amount1Int % 10000) % 1000) % 500) % 100) % 25) % 10) % 5) / 1;
+
+
+    return "change back on " + to_string(hundreds) + " hundreds " + to_string(tens)
+           + " tens " + to_string(fives) + " fives " + to_string(ones)
+           + " ones " + to_string(quarters) + " quarters " + to_string(dimes)
+           + " dimes " + to_string(nickels) + " nickels " + to_string(cents)
+           + " pennies for purchase of " + toCurrency(price) + " is " + toCurrency(amount1) + " which is "
+           + to_string(hundreds100) + " hundreds " + to_string(tens10) + " tens "
+           + to_string(fives5) + " fives " + to_string(ones1) + " ones " + to_string(quarters25) + " quarters "
+           + to_string(dimes11) + " dimes " + to_string(nickels05) + " nickels " + to_string(cents01) + " pennies ";
 }

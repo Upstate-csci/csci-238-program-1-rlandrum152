@@ -11,13 +11,14 @@
 #include <sstream>
 #include <iomanip>
 #include <fstream>
+#include <locale>
 
 using namespace std;
 class Money
 {
 private:
-    double total;
-    int hundreds, tens, fives, ones, quarters, dimes, nickels, cents;
+    double total, amount1, price;
+    int hundreds, tens, fives, ones, quarters, dimes, nickels, cents, hundreds100, tens10, fives5, ones1, quarters25, dimes11, nickels05, cents01  ;
 public:
     string toString();
     string toCurrency(double amount);
